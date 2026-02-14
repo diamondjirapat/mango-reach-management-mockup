@@ -1,0 +1,5 @@
+*.log
+frontend/node_modules
+.idea
+.venv
+__pycache__
