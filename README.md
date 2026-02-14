@@ -1,5 +1,13 @@
 # Ads Reach Analyzer
 
+---
+
+# Requirements
+
+1. [python](https://www.python.org/downloads/)
+2. [Docker](https://www.docker.com/get-started/)
+3. [NodeJS](https://nodejs.org/en/download)
+
 **Step-by-step to run**
 
 1. **Database** (Docker):  
