@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 class AdsBase(BaseModel):
@@ -6,12 +6,13 @@ class AdsBase(BaseModel):
     project_id: str
     source: str
     source_url: Optional[str] = None
+    type: str = "online"
     click_count: int
     cost: float
-    score: float
+    score: float = Field(default=0.0, ge=0.0, le=10.0)
 
 class AdsCreate(AdsBase):
-    pass
+    score: float = Field(default=0.0, ge=0.0, le=10.0)
 
 class Ads(AdsBase):
     id: int

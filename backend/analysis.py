@@ -14,7 +14,6 @@ def calculate_score(click_count: int, cost: float, source: str) -> float:
         "TikTok": 1.5,
         "Flyers": 0.5,
         "Billboard": 0.8,
-        "Unknown": 0.1
     }
     
     weight = source_weights.get(source, 1.0)
