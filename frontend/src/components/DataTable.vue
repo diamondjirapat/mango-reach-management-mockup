@@ -23,6 +23,7 @@ const getScoreClass = (score) => {
             <th>ID</th>
             <th>Project Name</th>
             <th>Source</th>
+            <th>Type</th>
             <th>Clicks</th>
             <th>Cost</th>
             <th>Score</th>
@@ -38,8 +39,9 @@ const getScoreClass = (score) => {
               </div>
             </td>
             <td><span class="badge">{{ ad.source }}</span></td>
+            <td><span :class="['type-badge', ad.type === 'online' ? 'type-online' : 'type-offline']">{{ ad.type || 'online' }}</span></td>
             <td>{{ ad.click_count }}</td>
-            <td>${{ ad.cost.toFixed(2) }}</td>
+            <td>฿{{ ad.cost.toFixed(2) }}</td>
             <td>
               <span :class="['score-badge', getScoreClass(ad.score)]">
                 {{ ad.score.toFixed(1) }}
@@ -116,6 +118,24 @@ tr:hover td {
   border-radius: 4px;
   font-size: 0.85rem;
   color: #495057;
+}
+
+.type-badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.type-online {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.type-offline {
+  background-color: #fff3cd;
+  color: #856404;
 }
 
 .score-badge {

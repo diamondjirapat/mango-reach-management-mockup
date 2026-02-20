@@ -23,10 +23,10 @@ const selectedSource = ref(null)
 const selectedScoreBucket = ref(null)
 const selectedChannel = ref(null)
 
-const channelGroups = {
-  offline: ['Billboard', 'Flyers', 'Unknown'],
-  online: ['TikTok', 'Facebook', 'X', 'Instagram', 'Google']
-}
+// const channelGroups = {
+//   offline: ['Billboard', 'Flyers', 'Unknown'],
+//   online: ['TikTok', 'Facebook', 'X', 'Instagram', 'Google']
+// }
 
 const channelLabels = {
   online: 'Online',
@@ -52,8 +52,8 @@ const filteredAds = computed(() => {
   return (props.ads || []).filter((ad) => {
     const matchesSource = !selectedSource.value || ad.source === selectedSource.value
     const matchesScore = !selectedScoreBucket.value || matchesScoreBucket(ad, selectedScoreBucket.value)
-    const source = ad.source || 'Unknown'
-    const matchesChannel = !selectedChannel.value || channelGroups[selectedChannel.value].includes(source)
+    const adType = ad.type || 'online'
+    const matchesChannel = !selectedChannel.value || selectedChannel.value === adType
     return matchesSource && matchesScore && matchesChannel
   })
 })
@@ -102,15 +102,12 @@ const channelBreakdown = computed(() => {
   })
 
   for (const ad of baseAds) {
-    const source = ad.source || 'Unknown'
+    const adType = ad.type || 'online'
     const clicks = ad.click_count || 0
 
-    if (channelGroups.offline.includes(source)) {
+    if (adType === 'offline') {
       totals.offline += clicks
-      continue
-    }
-
-    if (channelGroups.online.includes(source)) {
+    } else {
       totals.online += clicks
     }
   }
@@ -212,7 +209,6 @@ const clearFilters = () => {
         </button>
       </div>
       <p v-if="selectedChannel" class="summary">Active channel filter: {{ channelLabels[selectedChannel] }}</p>
-      <p class="summary">Offline: Billboard, Flyers, Unknown | Online: TikTok, Facebook, X, Instagram, Google</p>
     </div>
 
     <div class="panel">

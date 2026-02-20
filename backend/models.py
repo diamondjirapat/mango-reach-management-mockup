@@ -8,6 +8,7 @@ class AdsData(Base):
     project_id = Column(String, index=True)
     source = Column(String)
     source_url = Column(String, nullable=True)
+    type = Column(String, default="online")
     click_count = Column(Integer, default=0)
     cost = Column(Float, default=0.0)
     score = Column(Float, default=0.0)
