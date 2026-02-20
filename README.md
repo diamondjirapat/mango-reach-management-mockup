@@ -26,7 +26,7 @@
 
 # Access
 
-Frontend: [http://localhost:5173](http://localhost:5173)  USER/PASS: postgres
+Frontend: [http://localhost:5173](http://localhost:5173)  USER/PASS: postgres DATABASE: ads_reach
 
 Backend: [http://localhost:8000/docs](http://localhost:8000/docs)
 
