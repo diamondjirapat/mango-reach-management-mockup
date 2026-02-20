@@ -3,3 +3,4 @@ frontend/node_modules
 .idea
 .venv
 __pycache__
+/node_modules
