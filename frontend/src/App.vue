@@ -3,12 +3,19 @@ import { ref, onMounted, watch } from 'vue'
 import Dashboard from './components/Dashboard.vue'
 import DataTable from './components/DataTable.vue'
 import Visualization from './components/Visualization.vue'
+import AddAdModal from './components/AddAdModal.vue'
 import api from './services/api'
 
 const stats = ref(null)
 const ads = ref([])
+const filteredAds = ref([])
 const loading = ref(true)
 const activeView = ref(localStorage.getItem('activeView') || 'dashboard')
+const showAddModal = ref(false)
+
+const onFilterChange = (filtered) => {
+  filteredAds.value = filtered
+}
 
 const fetchData = async () => {
   loading.value = true
@@ -40,6 +47,7 @@ watch(activeView, (view) => {
     <header>
       <h1>Ads Reach Engagement Analyzer</h1>
       <div class="actions">
+        <button @click="showAddModal = true" class="add-btn">+ Add Ad</button>
         <button @click="fetchData" class="refresh-btn">Refresh Data</button>
         <button
           v-if="activeView === 'dashboard'"
@@ -59,9 +67,9 @@ watch(activeView, (view) => {
     </header>
 
     <main v-if="!loading && activeView === 'dashboard'">
-      <Dashboard :stats="stats" />
+      <Dashboard :ads="ads" @filter-change="onFilterChange" />
       <div class="divider"></div>
-      <DataTable :ads="ads" />
+      <DataTable :ads="filteredAds" />
     </main>
     <main v-else-if="!loading">
       <Visualization :stats="stats" :ads="ads" />
@@ -69,6 +77,12 @@ watch(activeView, (view) => {
     <div v-else class="loading">
       Loading...
     </div>
+
+    <AddAdModal
+      v-if="showAddModal"
+      @close="showAddModal = false"
+      @ad-created="fetchData"
+    />
   </div>
 </template>
 
@@ -100,6 +114,22 @@ h1 {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+
+.add-btn {
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.add-btn:hover {
+  background-color: #d35400;
 }
 
 .refresh-btn {
