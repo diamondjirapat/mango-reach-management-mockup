@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
@@ -49,4 +49,5 @@ def create_ad(ad: schemas.AdsCreate, db: Session = Depends(get_db)):
 
 @app.get("/")
 def read_root():
-    return {"message": "Ads Reach Analyzer API"}
+    return {"status": "ok", "message": "Ads Reach Analyzer API is running"}
+

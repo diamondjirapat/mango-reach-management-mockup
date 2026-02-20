@@ -1,12 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Dashboard from './components/Dashboard.vue'
 import DataTable from './components/DataTable.vue'
+import Visualization from './components/Visualization.vue'
 import api from './services/api'
 
 const stats = ref(null)
 const ads = ref([])
 const loading = ref(true)
+const activeView = ref(localStorage.getItem('activeView') || 'dashboard')
 
 const fetchData = async () => {
   loading.value = true
@@ -27,19 +29,42 @@ const fetchData = async () => {
 onMounted(() => {
   fetchData()
 })
+
+watch(activeView, (view) => {
+  localStorage.setItem('activeView', view)
+})
 </script>
 
 <template>
   <div class="app-container">
     <header>
       <h1>Ads Reach Engagement Analyzer</h1>
-      <button @click="fetchData" class="refresh-btn">Refresh Data</button>
+      <div class="actions">
+        <button @click="fetchData" class="refresh-btn">Refresh Data</button>
+        <button
+          v-if="activeView === 'dashboard'"
+          @click="activeView = 'visualization'"
+          class="viz-btn"
+        >
+          Visualization
+        </button>
+        <button
+          v-else
+          @click="activeView = 'dashboard'"
+          class="viz-btn"
+        >
+          Dashboard
+        </button>
+      </div>
     </header>
 
-    <main v-if="!loading">
+    <main v-if="!loading && activeView === 'dashboard'">
       <Dashboard :stats="stats" />
       <div class="divider"></div>
       <DataTable :ads="ads" />
+    </main>
+    <main v-else-if="!loading">
+      <Visualization :stats="stats" :ads="ads" />
     </main>
     <div v-else class="loading">
       Loading...
@@ -57,15 +82,24 @@ onMounted(() => {
 
 header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
   margin-bottom: 2rem;
 }
 
 h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #ffffff;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .refresh-btn {
@@ -77,10 +111,27 @@ h1 {
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s;
+  flex-shrink: 0;
 }
 
 .refresh-btn:hover {
   background-color: #3aa876;
+}
+
+.viz-btn {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.viz-btn:hover {
+  background-color: #3f566d;
 }
 
 .divider {
